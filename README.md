@@ -1,5 +1,5 @@
 # PyTorch_CAM-loss
-pytorch cam loss implementation
+pytorch cam loss unofficial implementation
 
 [논문 링크](https://arxiv.org/pdf/2109.01359.pdf)
    
