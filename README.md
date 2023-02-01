@@ -14,8 +14,8 @@ cam loss의 아이디어도 기본적으로 roi에 대한 정보를 loss에 사�
 <br>
 (left: CE Loss, right: CAM Loss)
 <p align=center>
-<img width=500 src="./result.png"/>
-<img width=500 src="./cam_loss_result.png"/>
+<img width=400 src="./result.png"/>
+<img width=400 src="./cam_loss_result.png"/>
 </p>
 
 
