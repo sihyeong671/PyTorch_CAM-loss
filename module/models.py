@@ -2,6 +2,15 @@ import torch
 import torch.nn as nn
 from torchvision import models
 
+def get_model(name: str, **kwargs):
+    if name == "resnet18":
+        Resnet18(**kwargs)
+    elif name == "custom":
+        CustomModel(**kwargs)
+    else:
+        raise ValueError(f"{name} model is not found")
+
+
 class Resnet18(nn.Module):
     def __init__(self, num_classes):
         super().__init__()
@@ -21,7 +30,7 @@ class Resnet18(nn.Module):
         return x, self.feature_map
     
 
-class TestModel(nn.Module):
+class CustomModel(nn.Module):
     def __init__(self, num_classes):
         super().__init__()
         self.conv = nn.Sequential(
