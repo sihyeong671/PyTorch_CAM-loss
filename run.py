@@ -1,12 +1,17 @@
 import argparse
 
 from module.utils import Config
-from module.trainer import Trainer
+from module.base_trainer import Trainer as BaseTrainer
+from module.cam_loss_trainer import Trainer as CamLossTrainer
 
 
 def run(config: Config):
     
-    trainer = Trainer(config=config)
+    if config.use_cam:
+        trainer = CamLossTrainer(config=config)
+    else:
+        trainer = BaseTrainer(config=config)
+    
     trainer.setup()
 
     # trainer.train()
