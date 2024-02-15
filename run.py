@@ -12,9 +12,12 @@ def run(config: Config):
     else:
         trainer = BaseTrainer(config=config)
     
-    trainer.setup()
+    trainer.setup(mode=config.mode)
 
-    trainer.train()
+    if config.mode == "train":
+        trainer.train()
+    elif config.mode == "test":
+        trainer.test()
 
         
 
@@ -27,7 +30,7 @@ if __name__ == "__main__":
     parser.add_argument("--seed", type=int, default=999)
     parser.add_argument("--data_path", type=str, default="./data")
     parser.add_argument("--save_dir", type=str, default="./log")
-    parser.add_argument("--exp_name", type=str, default=None)
+    parser.add_argument("--exp_name", type=str, default="2024-02-14,21:24:23")
     parser.add_argument("--mode", type=str, default="train")
     parser.add_argument("--model_name", type=str, default="custom")
     parser.add_argument("--use_cam", type=bool, default=False)

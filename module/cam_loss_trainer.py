@@ -118,7 +118,7 @@ class Trainer:
                 "mnist",
                 root=f"{self.config.data_path}/minst",
                 train=False,
-                transforms=test_transform,
+                transform=test_transform,
                 download=True
             )
 
