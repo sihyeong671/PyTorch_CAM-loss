@@ -14,13 +14,13 @@ def run(config: Config):
     
     trainer.setup()
 
-    # trainer.train()
+    trainer.train()
 
         
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epochs", type=int, default=30)
+    parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--batch_size", type=int, default=64)
     parser.add_argument("--num_workers", type=int, default=4) # if your os is Windows, then set 0
     parser.add_argument("--lr", type=float, default=1e-4)

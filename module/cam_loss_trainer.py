@@ -1,19 +1,13 @@
-import sys
-import os
-from glob import glob
-
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score
-import albumentations as A
-from albumentations.pytorch.transforms import ToTensorV2
+from sklearn.metrics import accuracy_score, f1_score
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
+from torchvision import transforms
 
 
 from module.datasets import get_dataset
@@ -53,17 +47,17 @@ class Trainer:
 
             
             # Train
-            train_transform = A.Compose([
+            train_transform = transforms.Compose([
                 # add augmentation
-                A.Normalize(),
-                ToTensorV2()
+                transforms.ToTensor(),
+                transforms.Normalize((0.5), (0.5))
             ])
 
             train_dataset = get_dataset(
                 "mnist",
                 root=f"{self.config.data_path}/minst",
                 train=True,
-                transforms=train_transform,
+                transform=train_transform,
                 download=True
             )
 
@@ -75,16 +69,16 @@ class Trainer:
             )
             
             # Validation
-            val_transform = A.Compose([
-                A.Normalize(),
-                ToTensorV2()
+            val_transform = transforms.Compose([
+                transforms.ToTensor(), # 0 ~ 1
+                transforms.Normalize((0.5), (0.5)) # -1 ~ 1
             ])
 
             val_dataset = get_dataset(
                 "mnist",
                 root=f"{self.config.data_path}/minst",
                 train=False,
-                transforms=val_transform,
+                transform=val_transform,
                 download=True
             )         
 
@@ -115,9 +109,9 @@ class Trainer:
 
         elif mode == "test":
 
-            test_transform = A.Compose([
-                A.Normalize(),
-                ToTensorV2()
+            test_transform = transforms.Compose([
+                transforms.ToTensor(), # 0 ~ 1
+                transforms.Normalize((0.5), (0.5)) # -1 ~ 1
             ])
 
             self.test_dataset = get_dataset(
@@ -157,7 +151,7 @@ class Trainer:
             train_loss_CAM = 0
             train_acc = 0
             train_f1 = 0
-            if epoch > 15:
+            if epoch > 10:
                 alpha = 3
             for imgs, labels in tqdm(self.train_dataloader):
                 
@@ -167,8 +161,9 @@ class Trainer:
                 # modify the code to fit your task 
                 imgs = imgs.to(self.config.device)
                 labels = labels.to(self.config.device)
-                
-                self.optimizer.zero_grad()
+
+                self.optimizer_theta.zero_grad()
+                self.optimizer_w.zero_grad()
 
                 pred, feature_map = self.model(imgs)
                 
@@ -192,8 +187,10 @@ class Trainer:
                     train_loss_CE += loss_CE.item()
                     train_loss_CAM += loss_CAM.item()
                     _, y_pred = torch.max(pred.data, dim=1)
-                    train_acc += (y_pred==labels).sum().item()
-                    train_f1 += f1_score(labels.detach().cpu().numpy(), y_pred.detach().cpu().numpy(), average="macro")
+                    y_pred = y_pred.detach().cpu().numpy()
+                    labels = labels.detach().cpu().numpy()
+                    train_acc += accuracy_score(y_pred, labels)
+                    train_f1 += f1_score(labels, y_pred, average="macro")
                 
                 self.optimizer_theta.step()
                 self.optimizer_w.step()
@@ -230,11 +227,13 @@ class Trainer:
                 labels = labels.to(self.config.device)
 
                 pred, _ = self.model(imgs)
-                loss = self.loss_fn(pred, labels)
+                loss = self.loss_CE(pred, labels)
                 val_loss += loss.item()
                 _, y_pred = torch.max(pred.data, dim=1)
-                val_acc += (y_pred==labels).sum().item()
-                val_f1 += f1_score(labels.detach().cpu().numpy(), y_pred.detach().cpu().numpy(), average="macro")
+                y_pred = y_pred.cpu().numpy()
+                labels = labels.cpu().numpy()
+                val_acc += accuracy_score(y_pred, labels)
+                val_f1 += f1_score(y_pred, labels, average="macro")
 
             val_loss /= len(self.val_dataloader)
             val_acc /= len(self.val_dataloader)

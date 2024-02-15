@@ -4,9 +4,9 @@ from torchvision import models
 
 def get_model(name: str, **kwargs):
     if name == "resnet18":
-        Resnet18(**kwargs)
+        return Resnet18(**kwargs)
     elif name == "custom":
-        CustomModel(**kwargs)
+        return CustomModel(**kwargs)
     else:
         raise ValueError(f"{name} model is not found")
 

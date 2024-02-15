@@ -1,0 +1,15 @@
+{
+    "device": "cuda",
+    "epochs": 20,
+    "batch_size": 64,
+    "num_workers": 4,
+    "lr": 0.0001,
+    "seed": 999,
+    "data_path": "./data",
+    "save_dir": "./log",
+    "exp_name": "2024-02-14,21:18:01",
+    "mode": "train",
+    "model_name": "custom",
+    "use_cam": false,
+    "log_dir": "./log/2024-02-14,21:18:01"
+}

@@ -1,2 +1,4 @@
+data/
+log/
 mnist/
 __pycache__/
