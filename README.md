@@ -3,15 +3,21 @@
 
 ## Run
 ```sh
+# train
 python run.py
 
 python run.py --use_cam=True
+
+# test
+python run.py --mode=test
+
+python run.py --use_cam=True --mode=test
 ```
 
 
 ## Result
-I think CAM loss is not effective in simple image or simple model.
-There are also limitations in the model architecture for applying cam loss.
+I think CAM loss is not effective in simple image or simple model.<br/>
+There are also limitations in the model architecture for applying cam loss.<br/>
 To know experimental results more accurately, maybe I need more experiments is required by changing hyper parameter(eg. alpha, model architecture, ...)
 
 
