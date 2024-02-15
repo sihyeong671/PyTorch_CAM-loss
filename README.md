@@ -16,7 +16,7 @@ To know experimental results more accurately, maybe I need more experiments is r
 
 
 ### without cam loss
-> best acc : 0.9880 
+> best acc : 0.9880<br/>
 > best f1 : 0.9883
 
 <p align=center>
@@ -24,7 +24,7 @@ To know experimental results more accurately, maybe I need more experiments is r
 </p>
 
 ### with cam loss
-> best acc : 0.9873
+> best acc : 0.9873<br/>
 > best f1 : 0.9877
 
 <p align=center>
